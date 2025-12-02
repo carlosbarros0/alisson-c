@@ -1,196 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AC Imóveis - Seu Imóvel Está Aqui</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0a0a23, #000000);
-            color: white;
-            text-align: center;
-        }
-
-        header {
-            padding: 30px;
-        }
-
-        h1 {
-            font-size: 40px;
-            margin: 0;
-            color: #4db8ff;
-        }
-
-        .botao {
-            display: block;
-            width: 80%;
-            margin: 15px auto;
-            padding: 15px;
-            font-size: 20px;
-            background: #003366;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .botao:hover {
-            background: #0055aa;
-        }
-
-        #conteudo {
-            margin-top: 30px;
-        }
-
-        .card {
-            background: #111;
-            margin: 20px auto;
-            width: 90%;
-            padding: 15px;
-            border-radius: 12px;
-        }
-
-        .card img {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 10px;
-        }
-
-        .foto-min {
-            width: 90px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .redes a {
-            display: block;
-            color: #4db8ff;
-            font-size: 22px;
-            margin: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>AC Imóveis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- React CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #000000, #001f3f);
+      color: white;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    #root {
+      max-width: 700px;
+      width: 100%;
+    }
+    button {
+      margin: 5px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #004080;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0066cc;
+    }
+    a {
+      color: #63b3ed;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+      transition: transform 0.3s;
+    }
+    img:hover {
+      transform: scale(1.05);
+    }
+    .imovel-info {
+      margin-bottom: 20px;
+    }
+    .foto-buttons button {
+      background-color: #003366;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState } = React;
 
-    <header>
-        <h1>AC Imóveis</h1>
-        <p>Seu imóvel está aqui!</p>
-    </header>
+    const imoveis = [
+      {
+        id: 1,
+        titulo: "Casa no Jardim das Flores",
+        preco: "R$ 450.000",
+        localizacao: "Rua das Flores, 123",
+        fotos: [
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700",
+          "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=700",
+          "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700",
+        ],
+      },
+      {
+        id: 2,
+        titulo: "Apartamento no Centro",
+        preco: "R$ 350.000",
+        localizacao: "Av. Central, 456",
+        fotos: [
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=700",
+          "https://images.unsplash.com/photo-1578943909581-6f0d97244e3c?w=700",
+          "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700",
+        ],
+      },
+    ];
 
-    <main>
-        <button onclick="abrirWhatsapp()" class="botao">💬 Falar no WhatsApp</button>
-        <button onclick="mostrarRedes()" class="botao">📱 Redes Sociais</button>
-        <button onclick="mostrarImoveis()" class="botao">🏠 Ver Imóveis</button>
+    function App() {
+      const [mostrarRedes, setMostrarRedes] = useState(false);
+      const [imovelSelecionado, setImovelSelecionado] = useState(null);
+      const [fotoIndex, setFotoIndex] = useState(0);
+      
+      const whatsappNumero = "558596141574"; // Numero do seu pai aqui, no formato internacional
 
-        <div id="conteudo"></div>
-    </main>
-
-<script>
-    // CONFIGURAÇÕES — coloque seu número e redes aqui!
-    const telefone = "55SEUNUMERO"; // EXEMPLO: 5598999999999
-    const instagram = "https://instagram.com/SEUINSTAGRAM";
-    const facebook = "https://facebook.com/SEUFACEBOOK";
-
-    function abrirWhatsapp() {
-        window.open("https://wa.me/" + telefone, "_blank");
-    }
-
-    function mostrarRedes() {
-        document.getElementById("conteudo").innerHTML = `
-            <div class='card redes'>
-                <h2>Redes Sociais</h2>
-                <a href='${instagram}' target='_blank'>📸 Instagram</a>
-                <a href='${facebook}' target='_blank'>📘 Facebook</a>
-            </div>
-        `;
-    }
-
-    // LISTA DE IMÓVEIS
-    // Aqui você adiciona quantos quiser, basta copiar o modelo ↓
-    const imoveis = {
-        1: {
-            nome: "Casa Moderna",
-            local: "Centro",
-            preco: "R$ 350.000",
-            fotos: [
-                "https://via.placeholder.com/600x400?text=Casa+1+Foto+1",
-                "https://via.placeholder.com/600x400?text=Casa+1+Foto+2",
-                "https://via.placeholder.com/600x400?text=Casa+1+Foto+3"
-            ]
-        },
-        2: {
-            nome: "Apartamento Luxo",
-            local: "Bairro Novo",
-            preco: "R$ 220.000",
-            fotos: [
-                "https://via.placeholder.com/600x400?text=Ap+1+Foto+1",
-                "https://via.placeholder.com/600x400?text=Ap+1+Foto+2",
-                "https://via.placeholder.com/600x400?text=Ap+1+Foto+3"
-            ]
+      function abrirWhatsApp(imovel = null) {
+        let texto = "Olá, tinha interesse por esse imóvel.";
+        if(imovel){
+          texto += `\n\nInformações do imóvel:\n${imovel.titulo}\n${imovel.preco}\n${imovel.localizacao}`;
         }
-    };
+        const url = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(texto)}`;
+        window.open(url, "_blank");
+      }
 
-    function mostrarImoveis() {
-        let html = "<h2>Imóveis Disponíveis</h2>";
+      function mostrarImoveis() {
+        setImovelSelecionado(imoveis[0]);
+        setFotoIndex(0);
+        setMostrarRedes(false);
+      }
 
-        Object.keys(imoveis).forEach(id => {
-            let im = imoveis[id];
+      return (
+        <div>
+          <h1 style={{textAlign: "center", marginBottom: 30}}>AC Imóveis</h1>
+          <div style={{textAlign: "center"}}>
+            <button onClick={() => abrirWhatsApp()}><b>WhatsApp</b></button>
+            <button onClick={() => { setMostrarRedes(!mostrarRedes); setImovelSelecionado(null); }}><b>Redes Sociais</b></button>
+            <button onClick={() => mostrarImoveis()}><b>Imóveis</b></button>
+          </div>
 
-            html += `
-                <div class='card'>
-                    <img src="${im.fotos[0]}" onclick="abrirImovel(${id})">
-                    <h3>${im.nome}</h3>
-                    <p>📍 ${im.local} • ${im.preco}</p>
-                </div>
-            `;
-        });
-
-        document.getElementById("conteudo").innerHTML = html;
-    }
-
-    function abrirImovel(id) {
-        let im = imoveis[id];
-
-        let miniaturas = im.fotos.map(foto => `
-            <img class='foto-min' src="${foto}" onclick="trocarFoto('${foto}')">
-        `).join("");
-
-        document.getElementById("conteudo").innerHTML = `
-            <div class='card'>
-                <h2>${im.nome}</h2>
-
-                <img id='foto-principal' src="${im.fotos[0]}">
-
-                <div>${miniaturas}</div>
-
-                <p>📍 ${im.local}</p>
-                <p>💰 ${im.preco}</p>
-
-                <button class="botao" onclick="whatsappImovel(${id})">
-                    💬 Falar sobre este imóvel
-                </button>
+          {mostrarRedes && (
+            <div style={{textAlign: "center", marginTop: 20, marginBottom: 30}}>
+              <a href="https://instagram.com/seu_instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://facebook.com/seu_facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
             </div>
-        `;
+          )}
+
+          {imovelSelecionado ? (
+            <div style={{marginTop: 40}}>
+              <h2>{imovelSelecionado.titulo}</h2>
+              <div className="imovel-info">
+                <p><strong>Preço:</strong> {imovelSelecionado.preco}</p>
+                <p><strong>Localização:</strong> {imovelSelecionado.localizacao}</p>
+              </div>
+              <img 
+                src={imovelSelecionado.fotos[fotoIndex]} 
+                alt="Foto do imóvel" 
+                onClick={() => abrirWhatsApp(imovelSelecionado)} 
+                title="Clique para conversar no WhatsApp"
+              />
+              <div className="foto-buttons" style={{textAlign: "center", marginBottom: 30}}>
+                <button disabled={fotoIndex === 0} onClick={() => setFotoIndex(fotoIndex - 1)}>Anterior</button>
+                <button disabled={fotoIndex === imovelSelecionado.fotos.length - 1} onClick={() => setFotoIndex(fotoIndex + 1)}>Próximo</button>
+              </div>
+              <button onClick={() => setImovelSelecionado(null)}>Fechar Imóvel</button>
+            </div>
+          ) : (
+            !mostrarRedes && <p style={{textAlign: "center", marginTop: 40}}>Clique em "Imóveis" para ver as opções.</p>
+          )}
+          <div className="footer">
+            © AC Imóveis - 2025
+          </div>
+        </div>
+      );
     }
 
-    function trocarFoto(foto) {
-        document.getElementById("foto-principal").src = foto;
-    }
-
-    function whatsappImovel(id) {
-        let im = imoveis[id];
-
-        let mensagem = encodeURIComponent(
-            `Olá, tenho interesse no imóvel:\n${im.nome}\nLocal: ${im.local}\nPreço: ${im.preco}`
-        );
-
-        window.open(`https://wa.me/${telefone}?text=${mensagem}`, "_blank");
-    }
-</script>
-
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
