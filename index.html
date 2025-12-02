@@ -1,0 +1,229 @@
+import React, { useState } from "react";
+
+const imoveis = [
+  {
+    id: 1,
+    titulo: "Casa no Jardim das Flores",
+    preco: "R$ 450.000",
+    localizacao: "Rua das Flores, 123 - Jardim das Flores",
+    fotos: [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop",
+    ],
+  },
+  {
+    id: 2,
+    titulo: "Apartamento no Centro",
+    preco: "R$ 350.000",
+    localizacao: "Av. Central, 456 - Centro",
+    fotos: [
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1578943909581-6f0d97244e3c?w=400&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
+    ],
+  },
+];
+
+export default function AcImoveis() {
+  const [mostrarRedes, setMostrarRedes] = useState(false);
+  const [imovelSelecionado, setImovelSelecionado] = useState(null);
+  const [fotoIndex, setFotoIndex] = useState(0);
+
+  const whatsappNumero = "558596141574";
+
+  function abrirWhatsApp(imovel = null) {
+    let mensagem = "Olá, tinha interesse por esse imóvel.";
+    if (imovel) {
+      mensagem += `\n\nInformações do imóvel:\n${imovel.titulo}\n${imovel.preco}\n${imovel.localizacao}`;
+    }
+    const url = `https://wa.me/${whatsappNumero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+  }
+
+  return (
+    <div
+      style={{
+        background: "linear-gradient(to bottom, #000000, #001f3f)",
+        minHeight: "100vh",
+        color: "#fff",
+        fontFamily: "Arial, sans-serif",
+        padding: "20px",
+        textAlign: "center",
+      }}
+    >
+      <header style={{ fontSize: "36px", fontWeight: "bold", marginBottom: "30px" }}>
+        AC Imóveis
+      </header>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginBottom: "30px", flexWrap: "wrap" }}>
+        <button 
+          onClick={() => abrirWhatsApp()} 
+          style={{ 
+            padding: "15px 30px", 
+            fontSize: "18px",
+            background: "#25D366",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer"
+          }}
+        >
+          📱 WhatsApp
+        </button>
+        <button 
+          onClick={() => setMostrarRedes(!mostrarRedes)}
+          style={{ 
+            padding: "15px 30px", 
+            fontSize: "18px",
+            background: "#4267B2",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer"
+          }}
+        >
+          🌐 Redes Sociais
+        </button>
+        <button 
+          onClick={() => {
+            setImovelSelecionado(imoveis[0]);
+            setFotoIndex(0);
+          }}
+          style={{ 
+            padding: "15px 30px", 
+            fontSize: "18px",
+            background: "#FF6B35",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer"
+          }}
+        >
+          🏠 Imóveis
+        </button>
+      </div>
+
+      {mostrarRedes && (
+        <div style={{ marginBottom: "30px" }}>
+          <a
+            href="https://instagram.com/seu_instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              color: "#E4405F", 
+              fontSize: "20px",
+              marginRight: "30px",
+              textDecoration: "none"
+            }}
+          >
+            📸 Instagram
+          </a>
+          <a
+            href="https://facebook.com/seu_facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              color: "#4267B2", 
+              fontSize: "20px",
+              textDecoration: "none"
+            }}
+          >
+            📘 Facebook
+          </a>
+        </div>
+      )}
+
+      {imovelSelecionado ? (
+        <div>
+          <h2 style={{ fontSize: "28px", marginBottom: "10px" }}>
+            {imovelSelecionado.titulo}
+          </h2>
+          <p style={{ fontSize: "24px", color: "#FFD700", margin: "5px 0" }}>
+            {imovelSelecionado.preco}
+          </p>
+          <p style={{ fontSize: "20px", marginBottom: "20px" }}>
+            📍 {imovelSelecionado.localizacao}
+          </p>
+
+          <img
+            src={imovelSelecionado.fotos[fotoIndex]}
+            alt="Foto do imóvel"
+            style={{
+              width: "400px",
+              height: "300px",
+              objectFit: "cover",
+              borderRadius: "15px",
+              cursor: "pointer",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+              marginBottom: "20px",
+              transition: "transform 0.3s"
+            }}
+            onMouseEnter={(e) => e.target.style.transform = "scale(1.05)"}
+            onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+            onClick={() => abrirWhatsApp(imovelSelecionado)}
+          />
+
+          <div style={{ marginBottom: "20px" }}>
+            <button
+              disabled={fotoIndex === 0}
+              onClick={() => setFotoIndex(fotoIndex - 1)}
+              style={{
+                padding: "10px 20px",
+                marginRight: "10px",
+                background: "#666",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: fotoIndex === 0 ? "not-allowed" : "pointer"
+              }}
+            >
+              ⬅️ Anterior
+            </button>
+            <span style={{ margin: "0 20px" }}>
+              Foto {fotoIndex + 1} de {imovelSelecionado.fotos.length}
+            </span>
+            <button
+              disabled={fotoIndex === imovelSelecionado.fotos.length - 1}
+              onClick={() => setFotoIndex(fotoIndex + 1)}
+              style={{
+                padding: "10px 20px",
+                background: "#666",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: fotoIndex === imovelSelecionado.fotos.length - 1 ? "not-allowed" : "pointer"
+              }}
+            >
+              Próxima ➡️
+            </button>
+          </div>
+
+          <button
+            onClick={() => setImovelSelecionado(null)}
+            style={{
+              padding: "15px 40px",
+              fontSize: "18px",
+              background: "#666",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              cursor: "pointer"
+            }}
+          >
+            ← Voltar
+          </button>
+        </div>
+      ) : (
+        <div style={{ marginTop: "50px" }}>
+          <p style={{ fontSize: "20px" }}>
+            👨‍💼 Seu pai, corretor de imóveis experiente, tem as melhores opções para você!
+          </p>
+          <p style={{ fontSize: "18px", marginTop: "20px" }}>
+            Clique em "Imóveis" para ver as casas e apartamentos disponíveis
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
