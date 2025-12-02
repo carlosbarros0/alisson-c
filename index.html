@@ -2,155 +2,194 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>AC Imóveis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Imóveis - Seu Imóvel Está Aqui</title>
+
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .btn {
-            padding: 10px 20px;
-            background: #25D366;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0a23, #000000);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin: 0;
+            color: #4db8ff;
+        }
+
+        .botao {
+            display: block;
+            width: 80%;
+            margin: 15px auto;
+            padding: 15px;
+            font-size: 20px;
+            background: #003366;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            margin: 5px;
-            font-size: 18px;
         }
-        .btn-redes { background: #4267B2; }
-        .btn-voltar { background: #FF6B35; }
-        img { border-radius: 10px; transition: 0.2s; }
-        img:hover { transform: scale(1.02); }
-        .imovel-card {
+
+        .botao:hover {
+            background: #0055aa;
+        }
+
+        #conteudo {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #111;
+            margin: 20px auto;
+            width: 90%;
             padding: 15px;
-            border-radius: 10px;
-            background: #f5f5f5;
-            margin: 10px 0;
+            border-radius: 12px;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .foto-min {
+            width: 90px;
+            margin: 5px;
             cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .redes a {
+            display: block;
+            color: #4db8ff;
+            font-size: 22px;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
 
-<h1>AC Imóveis</h1>
+    <header>
+        <h1>AC Imóveis</h1>
+        <p>Seu imóvel está aqui!</p>
+    </header>
 
-<!-- Lista de imóveis -->
-<div id="lista"></div>
+    <main>
+        <button onclick="abrirWhatsapp()" class="botao">💬 Falar no WhatsApp</button>
+        <button onclick="mostrarRedes()" class="botao">📱 Redes Sociais</button>
+        <button onclick="mostrarImoveis()" class="botao">🏠 Ver Imóveis</button>
 
-<!-- Área do imóvel selecionado -->
-<div id="detalhes" style="display:none; margin-top:30px;"></div>
+        <div id="conteudo"></div>
+    </main>
 
 <script>
-    // ----- IMÓVEIS -----
-    const imoveis = [
-        {
-            id: 1,
-            titulo: "Casa no Jardim das Flores",
-            preco: "R$ 450.000",
-            localizacao: "Rua das Flores, 123 - Jardim das Flores",
-            fotos: [
-                "https://images.unsplash.com/photo-1512917774080-9991f1cfc750?w=400&h=300&fit=crop",
-                "https://images.unsplash.com/photo-1570129477492-45c0d3ecd2be?w=400&h=300&fit=crop",
-                "https://images.unsplash.com/photo-1600956428155-ffad4c1539a9?w=400&h=300&fit=crop"
-            ]
-        },
-        {
-            id: 2,
-            titulo: "Apartamento no Centro",
-            preco: "R$ 350.000",
-            localizacao: "Av. Central, 456 - Centro",
-            fotos: [
-                "https://images.unsplash.com/photo-1544033527-00f9f4f66fd7?w=400&h=300&fit=crop",
-                "https://images.unsplash.com/photo-1578943909581-6f0d97244e3c?w=400&h=300&fit=crop",
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop"
-            ]
-        }
-    ];
+    // CONFIGURAÇÕES — coloque seu número e redes aqui!
+    const telefone = "55SEUNUMERO"; // EXEMPLO: 5598999999999
+    const instagram = "https://instagram.com/SEUINSTAGRAM";
+    const facebook = "https://facebook.com/SEUFACEBOOK";
 
-    let fotoIndex = 0;
-    let imovelSelecionado = null;
-
-    // ----- CARREGAR LISTA -----
-    function carregarLista() {
-        const lista = document.getElementById("lista");
-        lista.innerHTML = "";
-
-        imoveis.forEach(imovel => {
-            lista.innerHTML += `
-                <div class="imovel-card" onclick="abrirImovel(${imovel.id})">
-                    <h2>${imovel.titulo}</h2>
-                    <p><b>Preço:</b> ${imovel.preco}</p>
-                    <p><b>Localização:</b> ${imovel.localizacao}</p>
-                </div>
-            `;
-        });
+    function abrirWhatsapp() {
+        window.open("https://wa.me/" + telefone, "_blank");
     }
 
-    // ----- ABRIR DETALHES -----
-    function abrirImovel(id) {
-        imovelSelecionado = imoveis.find(x => x.id === id);
-        fotoIndex = 0;
-
-        const detalhes = document.getElementById("detalhes");
-        detalhes.style.display = "block";
-
-        detalhes.innerHTML = `
-            <button class="btn-voltar btn" onclick="fechar()">🏠 Voltar</button>
-            <h2>${imovelSelecionado.titulo}</h2>
-            <p><b>Preço:</b> ${imovelSelecionado.preco}</p>
-            <p><b>Localização:</b> ${imovelSelecionado.localizacao}</p>
-
-            <img src="${imovelSelecionado.fotos[fotoIndex]}" width="400">
-
-            <br><br>
-            <button class="btn" onclick="anterior()">⬅ Anterior</button>
-            <button class="btn" onclick="proxima()">➡ Próxima</button>
-
-            <br><br>
-            <button class="btn" onclick="abrirWhatsApp()">📲 WhatsApp</button>
-            <button class="btn-redes btn" onclick="mostrarRedes()">🌐 Redes Sociais</button>
-
-            <div id="redes" style="display:none; margin-top:10px;">
-                <a href="#" style="margin-right:15px;">Instagram</a>
-                <a href="#">Facebook</a>
+    function mostrarRedes() {
+        document.getElementById("conteudo").innerHTML = `
+            <div class='card redes'>
+                <h2>Redes Sociais</h2>
+                <a href='${instagram}' target='_blank'>📸 Instagram</a>
+                <a href='${facebook}' target='_blank'>📘 Facebook</a>
             </div>
         `;
     }
 
-    // ----- FOTO ANTERIOR / PRÓXIMA -----
-    function anterior() {
-        if (!imovelSelecionado) return;
-        fotoIndex = (fotoIndex === 0) ? imovelSelecionado.fotos.length - 1 : fotoIndex - 1;
-        atualizarFoto();
+    // LISTA DE IMÓVEIS
+    // Aqui você adiciona quantos quiser, basta copiar o modelo ↓
+    const imoveis = {
+        1: {
+            nome: "Casa Moderna",
+            local: "Centro",
+            preco: "R$ 350.000",
+            fotos: [
+                "https://via.placeholder.com/600x400?text=Casa+1+Foto+1",
+                "https://via.placeholder.com/600x400?text=Casa+1+Foto+2",
+                "https://via.placeholder.com/600x400?text=Casa+1+Foto+3"
+            ]
+        },
+        2: {
+            nome: "Apartamento Luxo",
+            local: "Bairro Novo",
+            preco: "R$ 220.000",
+            fotos: [
+                "https://via.placeholder.com/600x400?text=Ap+1+Foto+1",
+                "https://via.placeholder.com/600x400?text=Ap+1+Foto+2",
+                "https://via.placeholder.com/600x400?text=Ap+1+Foto+3"
+            ]
+        }
+    };
+
+    function mostrarImoveis() {
+        let html = "<h2>Imóveis Disponíveis</h2>";
+
+        Object.keys(imoveis).forEach(id => {
+            let im = imoveis[id];
+
+            html += `
+                <div class='card'>
+                    <img src="${im.fotos[0]}" onclick="abrirImovel(${id})">
+                    <h3>${im.nome}</h3>
+                    <p>📍 ${im.local} • ${im.preco}</p>
+                </div>
+            `;
+        });
+
+        document.getElementById("conteudo").innerHTML = html;
     }
 
-    function proxima() {
-        if (!imovelSelecionado) return;
-        fotoIndex = (fotoIndex === imovelSelecionado.fotos.length - 1) ? 0 : fotoIndex + 1;
-        atualizarFoto();
+    function abrirImovel(id) {
+        let im = imoveis[id];
+
+        let miniaturas = im.fotos.map(foto => `
+            <img class='foto-min' src="${foto}" onclick="trocarFoto('${foto}')">
+        `).join("");
+
+        document.getElementById("conteudo").innerHTML = `
+            <div class='card'>
+                <h2>${im.nome}</h2>
+
+                <img id='foto-principal' src="${im.fotos[0]}">
+
+                <div>${miniaturas}</div>
+
+                <p>📍 ${im.local}</p>
+                <p>💰 ${im.preco}</p>
+
+                <button class="botao" onclick="whatsappImovel(${id})">
+                    💬 Falar sobre este imóvel
+                </button>
+            </div>
+        `;
     }
 
-    function atualizarFoto() {
-        document.querySelector("#detalhes img").src = imovelSelecionado.fotos[fotoIndex];
+    function trocarFoto(foto) {
+        document.getElementById("foto-principal").src = foto;
     }
 
-    // ----- WHATSAPP -----
-    function abrirWhatsApp() {
-        const num = "558596141574";
-        const msg = `Olá, tenho interesse no imóvel: ${imovelSelecionado.titulo}`;
-        window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
-    }
+    function whatsappImovel(id) {
+        let im = imoveis[id];
 
-    // ----- REDES -----
-    function mostrarRedes() {
-        const redes = document.getElementById("redes");
-        redes.style.display = redes.style.display === "none" ? "block" : "none";
-    }
+        let mensagem = encodeURIComponent(
+            `Olá, tenho interesse no imóvel:\n${im.nome}\nLocal: ${im.local}\nPreço: ${im.preco}`
+        );
 
-    // ----- VOLTAR -----
-    function fechar() {
-        document.getElementById("detalhes").style.display = "none";
+        window.open(`https://wa.me/${telefone}?text=${mensagem}`, "_blank");
     }
-
-    carregarLista();
 </script>
 
 </body>
